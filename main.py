@@ -6,13 +6,17 @@ import json
 
 import requests
 
+from datetime import datetime
+
 HISTORY_FILE = os.path.join(os.path.dirname(__file__), 'history.txt')
 
-STATUS_MESSAGES ={  404:'用户不存在'
-                ,403:'请求过于频繁'
-                ,401:'认证失败'
-                ,500:'Gith、Hub服务异常'
-                ,429:'请求过多，请稍后再试'}
+STATUS_MESSAGES = {
+    404: '用户不存在',
+    403: '请求过于频繁',
+    401: '认证失败',
+    500: 'GitHub服务异常',
+    429: '请求过多，请稍后再试',
+}
 
 def get_user_info():
     name = input("请输入要查询的用户名:")
@@ -48,14 +52,17 @@ def print_info(data, name):
 
 def save_history(data,name):
     if os.path.exists(HISTORY_FILE):
-        with open (HISTORY_FILE,'r') as f:
-            RECORD = json.loads(f.read())
-            
+        try:
+            with open (HISTORY_FILE,'r') as f:
+                RECORD = json.loads(f.read())
+        except json.JSONDecodeError:
+            RECORD = []        
+          
             
     else:
         RECORD = []
     followers= data['followers']
-    record = {'用户名':name,'关注者':followers}
+    record = {'用户名':name,'关注者':followers,'查询时间':datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
     RECORD.append(record)
     with open (HISTORY_FILE,'w') as f:
         f.write(json.dumps(RECORD))     
@@ -68,4 +75,42 @@ def main():
         print_info(data, name)
         save_history(data,name)
 
-main()
+while True:        
+
+    print('1.查询用户\n'
+        '2.查看历史记录\n'
+        '3.退出')
+
+    choose = input('请选择:')
+
+
+    if choose == '1':
+
+        main()
+
+    elif choose == '2':
+        if os.path.exists(HISTORY_FILE):
+            try:
+                with open (HISTORY_FILE,'r') as f:
+                    RECORD = json.loads(f.read())
+                    lens = len(RECORD)
+                    print('最近一次查询记录:')
+                    print(f"用户名:{RECORD[-1]['用户名']},关注者:{RECORD[-1]['关注者']},查询时间:{RECORD[-1]['查询时间']}")
+                    print('***历史查询记录***')
+                    for record in RECORD:
+                        print(f"用户名:{record['用户名']},关注者:{record['关注者']},查询时间:{record['查询时间']},总查询次数:{lens}")
+
+            except json.JSONDecodeError:
+                print('暂无历史记录或文件已经损坏')
+                            
+        else:
+            print("暂无历史记录")
+
+    elif choose =='3':
+        break
+        
+    else:
+        print('请输入功能序号')
+
+
+                    
