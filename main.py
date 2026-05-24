@@ -9,6 +9,7 @@ import requests
 from datetime import datetime
 
 HISTORY_FILE = os.path.join(os.path.dirname(__file__), 'history.txt')
+CONFIG = os.path.join(os.path.dirname(__file__), 'config.json')
 
 STATUS_MESSAGES = {
     404: '用户不存在',
@@ -16,13 +17,15 @@ STATUS_MESSAGES = {
     401: '认证失败',
     500: 'GitHub服务异常',
     429: '请求过多，请稍后再试',
-}
+                              }
 
 def get_user_info():
+    token = load_config()
     name = input("请输入要查询的用户名:")
     url = f"https://api.github.com/users/{name}"
+    headers = {"Authorization":f'Bearer {token}'} 
     try:
-        response = requests.get(url)
+        response = requests.get(url,headers = headers)
         code = response.status_code
         if code == 200:
             data = response.json()
@@ -41,8 +44,6 @@ def get_user_info():
         print(e)
         return None              
 
-
-
 def print_info(data, name):
     print(f"{name}的GitHub信息:")
     print(f"用户名:{data['login']}")
@@ -57,7 +58,6 @@ def save_history(data,name):
                 RECORD = json.loads(f.read())
         except json.JSONDecodeError:
             RECORD = []        
-          
             
     else:
         RECORD = []
@@ -67,6 +67,11 @@ def save_history(data,name):
     with open (HISTORY_FILE,'w') as f:
         f.write(json.dumps(RECORD))     
 
+def load_config():
+    with open(CONFIG,'r') as f:
+        config = json.load(f)
+        token = config.get('github_token')
+        return token
 
 def main():
     res = get_user_info()
@@ -74,12 +79,14 @@ def main():
         data, name = res
         print_info(data, name)
         save_history(data,name)
+        
+        
 
 while True:        
 
     print('1.查询用户\n'
-        '2.查看历史记录\n'
-        '3.退出')
+          '2.查看历史记录\n'
+          '3.退出')
 
     choose = input('请选择:')
 
@@ -98,7 +105,8 @@ while True:
                     print(f"用户名:{RECORD[-1]['用户名']},关注者:{RECORD[-1]['关注者']},查询时间:{RECORD[-1]['查询时间']}")
                     print('***历史查询记录***')
                     for record in RECORD:
-                        print(f"用户名:{record['用户名']},关注者:{record['关注者']},查询时间:{record['查询时间']},总查询次数:{lens}")
+                        print(f"用户名:{record['用户名']},关注者:{record['关注者']},查询时间:{record['查询时间']}")
+                    print(f"总查询次数:{lens}")
 
             except json.JSONDecodeError:
                 print('暂无历史记录或文件已经损坏')
@@ -112,5 +120,3 @@ while True:
     else:
         print('请输入功能序号')
 
-
-                    
