@@ -8,7 +8,7 @@ import requests
 
 from datetime import datetime
 
-HISTORY_FILE = os.path.join(os.path.dirname(__file__), 'history.txt')
+HISTORY_FILE = os.path.join(os.path.dirname(__file__), 'history.json')
 CONFIG = os.path.join(os.path.dirname(__file__), 'config.json')
 
 STATUS_MESSAGES = {
@@ -68,10 +68,27 @@ def save_history(data,name):
         f.write(json.dumps(RECORD))     
 
 def load_config():
-    with open(CONFIG,'r') as f:
-        config = json.load(f)
-        token = config.get('github_token')
-        return token
+    try:
+        with open(CONFIG,'r') as f:
+            config = json.load(f)
+            token = config.get('github_token')
+            if not token :
+                print('缺少Token,请先添加')
+                token = input('将你的Token粘贴在此处:')    
+                with open(CONFIG,'w') as f:
+                    f.write(json.dumps({"github_token":token}))
+                    return token
+            else:    
+                return token
+    except json.JSONDecodeError:
+        print('缺少Token,请先创建config.json')
+        token = input('将你的Token粘贴在此处:')    
+        with open(CONFIG,'w') as f:
+            f.write(json.dumps({"github_token":token}))
+            return token
+                
+
+
 
 def main():
     res = get_user_info()
