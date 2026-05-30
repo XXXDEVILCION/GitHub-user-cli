@@ -14,7 +14,7 @@ class History:
         if os.path.exists(file_path):
             try:
                 with open (file_path,'r') as f:
-                    self.records = json.load(f)
+                    self.records = json.loads(f.read())
             except json.JSONDecodeError:
                 self.records= [] 
         else:
