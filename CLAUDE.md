@@ -12,7 +12,7 @@
 - [x] HTTP 状态码处理
 - [x] 文件读写 + 异常处理
 - [x] 函数式编程
-- [ ] 类（class）
+- [x] 类（class）— `History` 类，含 `__init__`、实例属性、实例方法
 - [x] API auth（GitHub token）
 - [ ] YAML 读写
 - [ ] POST 请求
