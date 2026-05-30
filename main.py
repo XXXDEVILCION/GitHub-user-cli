@@ -5,15 +5,15 @@ import GitHub_api as api
 import history
 
 import info
-     
+
+import asyncio     
 
 
 def main():
-    res = api.get_user_info()
-    if res is not None:
-        data, name = res
-        info.print_info(data, name)
-        file = history.History(history.DEFAULT_HISTORY_FILE)
+    file = history.History(history.DEFAULT_HISTORY_FILE)
+    results = asyncio.run(api.main()) 
+    for data, name in results:                        
+        info.print_info(data, name)    
         file.save_history(data,name)
         
 
@@ -49,3 +49,5 @@ while True:
         
     else:
         print('请输入功能序号')
+
+
