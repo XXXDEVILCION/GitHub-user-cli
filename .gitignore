@@ -1,3 +1,5 @@
 config.json
+config.yaml
+history.json
 history.txt
 __pycache__/
