@@ -33,13 +33,13 @@ while True:
     elif choose == '2':
         file = history.History(history.DEFAULT_HISTORY_FILE)
         try:  
-            lens = len(file.records)
+            times = len(file.records)
             print('最近一次查询记录:')
             print(f"用户名:{file.records[-1]['用户名']},关注者:{file.records[-1]['关注者']},查询时间:{file.records[-1]['查询时间']}")
             print('***历史查询记录***')
             for record in file.records:
                 print(f"用户名:{record['用户名']},关注者:{record['关注者']},查询时间:{record['查询时间']}")
-            print(f"总查询次数:{lens}")
+            print(f"总查询次数:{times}")
 
         except IndexError :
                 print('暂无历史记录')    
