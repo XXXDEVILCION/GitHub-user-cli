@@ -2,9 +2,11 @@
 
 - 目标：练习 Python 基础（API 请求、文件读写、JSON/YAML、异常处理、类）
 - 路线图：https://github.com/WenyuChiou/awesome-agentic-ai-zh/blob/main/stages/00-foundations.zh-Hans.md
-- 当前阶段：Stage 0（基础准备）
+- 当前阶段：Stage 0 ✅ 完成（2026-05-30）
+- 仓库：https://github.com/XXXDEVILCION/GitHub-user-cli
 - 运行：`python main.py`
 - 只使用 requests + 标准库，不引入其他第三方库
+- 分支：`master`（JSON 配置） / `yaml`（YAML 配置）
 
 ## 当前进度
 
@@ -14,10 +16,10 @@
 - [x] 函数式编程
 - [x] 类（class）— `History` 类，含 `__init__`、实例属性、实例方法
 - [x] API auth（GitHub token）
-- [ ] YAML 读写
-- [ ] POST 请求
-- [ ] async/await
-- [ ] Git push / fork / clone
+- [x] YAML 读写
+- [x] POST 请求
+- [x] async/await — 使用 `asyncio.gather` + `asyncio.to_thread` 并发查询多用户
+- [x] Git push / fork / clone
 
 ## 反馈风格
 
