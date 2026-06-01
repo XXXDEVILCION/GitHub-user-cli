@@ -1,0 +1,190 @@
+========== Stage 1 学习对话记录 — 2026-06-01 ==========
+
+用户：知道我们现在的任务吗
+助手：查看看 PROGRESS.md 和 CLAUDE.md，确认当前处于 Stage 1：LLM 基础，3 个核心概念 + 6 个动手练习，默认 Path A（Ollama 本地）。
+
+用户：C:\Users\LBWNB\Desktop\awesome-agentic-ai-zh-main\stages\01-llm-basics.zh-Hans.md，我正在阅读stage1的学习文档
+助手：同步读取这份学习文档，确认内容结构。
+
+用户：一步步带我读这个学习文档
+助手：先说文档开头有个前提——先去读 resources/glossary.zh-Hans.md（术语表，约30分钟），问用户读了没。
+
+用户：大致读了一遍
+助手：直接从 3 个核心概念开始，问用户用自己的话解释 token。
+
+用户：token有点像碎片，将我的自然语言切成token发送给大模型，大模型再将这些碎片重建理解我的意思，然后输出token给我再翻译成自然语言
+助手：基本正确。补充：1) token 不一定是字（英文Hello=1 token，indescribable可能3-4个）；2) token是计费单位。继续问 context window。
+
+用户：就是字面意思，上下文窗口，或者上下文长度，指的是大模型能够查看的上下文有多少，更大的上下文长度意味着大模型能在长时间长距离的对话中保持记忆，不会经常性失忆
+助手：确认理解正确。补充具体数字：Claude 1M、GPT ~400k、Gemini 2M。继续问 temperature。
+
+用户：temperature字面上是温度，但实际上控制的是大模型的思维发散程度。temperature越高，大模型能联想到更多额外内容。但是为什么叫temperature？难道是类人的比喻？
+助手：解释名字来源——借用了物理热力学的概念。LLM输出token前内部给候选词打概率分，temperature作为除数：→0 高低分差距拉大，选最高分=稳定；→1 差距抹平，低分词也有机会=随机。物理里温度越高分子运动越混乱，借这个类比。
+
+三个核心概念过完。文档接下来是LLM家族对比表（可当参考资料），再往下是动手练习。问用户环境装了没。
+
+用户：不是还有一个必修阅读吗
+助手：确认，文档有5个必修阅读：1) Claude模型概览 2) Anthropic API Fundamentals 3) OpenAI Quickstart 4) Tokenizers图解指南 5) API定价页。问用户怎么开始。
+
+用户：这些链接都是说什么的
+助手：逐一解释5个链接的内容。
+
+用户：第一个和第五个就不看了，暂时不使用Claude模型。第二和第三个可以具体说一说
+助手：解释#2是Anthropic SDK教程，#3是OpenAI SDK教程。用户走Path A用Ollama+OpenAI兼容API，与#3直接相关。#2可先跳过。建议看#3后直接练习1。
+
+用户：等等，我这是学习，有些东西我可能不懂的，比如Anthropic SDK、OpenAI SDK，SDK是什么东西。注意CLAUDE.MD里我是学习，直接复制代码跑不符合学习。
+助手：承认不应假设用户知道。解释SDK = Software Development Kit，就是某家公司写好的Python库，装了直接调函数跟服务通信，不用自己写HTTP请求。用"自己做饭 vs 叫外卖"做比喻。列举两个SDK：OpenAI SDK（pip install openai，Ollama兼容）和Anthropic SDK（pip install anthropic）。建议换个方式——问用户引导性问题，让他自己写出练习1的5行代码。
+
+用户：我先去阅读openai quickstart
+助手：同意。
+
+用户：要在Node.js、Deno或Bun等服务器端JavaScript环境中使用OpenAI API...这是什么意思，和我有关系吗
+助手：没关系，直接跳过。只看Python部分。
+
+用户：（贴出OpenAI Quickstart的Python代码：pip install openai + from openai import OpenAI + client.responses.create）
+助手：确认这就是要看的部分。但提醒注意——Quickstart用的是Responses API（client.responses.create），而练习1起手码用的是Chat Completions API（client.chat.completions.create），是两套不同的API。建议继续找Chat Completions的示例。
+
+用户：pip install openai，先执行这个命令
+助手：执行 pip install openai，安装成功（openai-2.38.0）。
+
+用户：我还在阅读文档呢，我只是学过了请求常规api，而没有学过调用大模型api
+助手：确认这是新东西，让用户继续读。
+
+用户：（贴出Quickstart复制粘贴的代码）为什么我按照openai quickstart里复制粘贴它的操作会报错
+助手：让用户贴完整错误。
+
+用户：（贴出错误：OpenAIError: Missing credentials...）
+助手：问三个引导性问题：1) 这段代码试图连接谁的API？2) 你有这个API的key吗？3) 你现在打算走Path A还是Path B？
+
+用户：（贴出Quickstart中关于创建API密钥的内容）我忘了，我并没有openai的api
+助手：确认这就是原因。两个选择：Path A装Ollama（免费）或Path B/OpenAI去注册绑卡（花钱）。问用户选哪条。
+
+用户：我现在就有deepseek的api
+助手：太好了。DeepSeek API是OpenAI兼容的，能用openai SDK调用。问用户：Quickstart代码连的是api.openai.com，怎么改连DeepSeek？提示看练习1 Path A代码里base_url参数。
+
+用户：base_url="http://localhost:11434/v1"
+助手：确认思路对。问用户连DeepSeek的话base_url应该改什么。
+
+用户：我填好了
+助手：让用户贴代码。
+
+用户：（贴出代码，base_url="https://platform.deepseek.com"，仍用responses.create）
+助手：问用户这代码能跑吗？让用户看练习1起手码——base_url和api_key是放在哪里的。
+
+用户：我看到了，可是为什么要这么放，是openai给我写好的规定吗，我有必要去了解一下吗
+助手：解释设计思路——把"不变的东西"（服务器地址、身份）和"每次都变的东西"（消息内容）分开。base_url和api_key放OpenAI()构造里一次设好，后面.create()自动沿用。几乎所有API SDK都用这个模式。同时指出用户还有一个问题：用的是responses.create，练习1用的是chat.completions.create。
+
+用户：（重新梳理整个过程：从阅读文档→读quickstart→不理解SDK→安装SDK→没有OpenAI key但有DeepSeek key→想学习调用LLM→发现抄代码不理解为什么base_url填在哪→想让助手记住这段逻辑）
+助手：记录学习风格记忆。建议用户去看openai-python的GitHub README，学习SDK的API结构——OpenAI()构造器接受什么参数、Chat Completions是什么、参数放哪。
+
+用户：没错，这正是我想要的，学会基础用法。但是又有一个问题——https://github.com/openai/openai-python，只看到了openai自己的模型如何调用，没看到ds这样的模型如何调用
+助手：解释关键点——SDK默认发请求到api.openai.com，但base_url参数是"后门"，改了就能发到别的地方。DeepSeek和Ollama把自己的API设计成跟OpenAI一模一样（行业事实标准），所以同一个SDK改地址就能用。建议去查DeepSeek API文档。
+
+用户：在我去阅读deepseek的api文档之前，为什么ds的api也通过openai的SDK调用，是因为openai写的好代码，直接开源给大家用？
+助手：两方面：1) OpenAI SDK确实是开源的（Apache 2.0），谁都能装；2) 更关键的是API格式成了事实标准——OpenAI的API格式（/v1/chat/completions路径、messages参数等）变成行业模板，后来者主动兼容。用插座标准做类比。
+
+用户：ok，我已经阅读过代码了，需要解释代码。先问api_key=os.environ.get('DEEPSEEK_API_KEY')，是不是openai_quick里写的创建并导出API密钥那段。
+助手：确认是同一概念但有区别——OpenAI SDK有内置行为：不传api_key会自动读OPENAI_API_KEY环境变量。但DeepSeek的key存在DEEPSEEK_API_KEY（名字不同），SDK不认识，所以得手动用os.environ.get()读。解释os.environ是系统环境变量字典，.get()安全取值。
+
+用户：那我先在powershell输入setx DEEPSEEK_API_KEY "...."就对了吧
+助手：确认方向对，但提醒setx设的是永久变量，当前窗口不立即生效，要用$env:DEEPSEEK_API_KEY="..."给当前窗口设一次。
+
+用户：client = OpenAI(...)，这行代码是从OpenAI这个类创建一个叫作client的对象是吧
+助手：确认是类的实例化。
+
+用户：为什么叫client？我知道叫什么无所谓，但根据名字了解功能的原则，不理解为什么叫client。
+助手：解释client来自client-server架构——服务器是远程API服务，客户端是本地程序主动发起请求。几乎所有API SDK都用这个命名（Anthropic、AWS、Redis），以后看到client就知道是"跟某服务器通信的对象"。
+
+用户：response = client.chat.completions.create(...)，先别看内部代码。client即客户端要使用chat聊天功能，但completions是什么意思，create是创建的意思，但是创建什么？
+助手：解释completions来自GPT最初的设计理念——文本补全。你写半句话"猫在沙发上___"，模型补全后面的内容。现在对话式Chat本质还是补全，只是在你的话后面补上助手回复。client.chat.completions.create() = 创建聊天补全请求。同时对比老版Chat Completions API和新版Responses API。
+
+用户：（贴出create()里的具体参数：model, messages, stream, reasoning_effort等）里面就是参数或设置。messages列表里存了两个字典，用自然语言怎么理解？我的看法是一个字典代表用户发送的内容，另一个是大模型？
+助手：纠正——两个字典各是一句话，区别在role。"system"是你给模型的幕后指令（设定规则），"user"是你真正的问题。两条消息都是你发的。问用户：那模型的回复在哪？
+
+用户：response里
+助手：确认对。问用户怎么从response里把模型的回复取出来。提示用print(response)看看里面结构。
+
+用户：print(response.choices[0].message.content)
+助手：确认路径正确，展开响应结构：response → .choices（列表）→ [0]（第一条）→ .message（消息对象）→ .content（文本）。
+
+用户：（跑代码报错：OpenAIError: Missing credentials）
+助手：os.environ.get()拿到None。让用户在PowerShell跑$env:DEEPSEEK_API_KEY确认。
+
+用户：（$env:DEEPSEEK_API_KEY为空）
+助手：确认当前窗口没有变量。让用户$env:DEEPSEEK_API_KEY="真实key"设一次。
+
+用户：（代码输出：Hello! How can I assist you today?）
+助手：确认跑通。练习1核心目标达成。问是否继续练习2。
+
+用户：那些assert我记得你和我说过是确保格式的东西，我不用掌握
+助手：确认assert是自检逻辑，暂时不用管。练习1核心已完成。
+
+用户：（贴出Path A Ollama起手码）那你稍微解释一下这assert吧，我做一下了解
+助手：解释三部分：1) 顶部两行处理Windows终端编码问题；2) 三个assert——finish_reason检查模型为什么停止、len(text)>0检查文本非空、completion_tokens>0检查确实生成了内容；3) assert本质是假设-验证，用于自我检查。
+
+用户：（贴出DeepSeek API文档的Request/Response Schema）
+助手：确认文档分Request（发过去的参数）和Responses（返回的数据结构）两部分。
+
+用户：（贴出Response Schema详细字段）这个SCHEMA是什么意思
+助手：Schema = 数据结构说明书。用表格解释各字段含义。读API文档主要就是看Schema。
+
+用户：object[] 这个在python是什么类型
+助手：object[]在Python里就是列表，每个元素是对象。用response.choices[0].message.content展开说明。
+
+用户：这.是什么用法，我忘记了
+助手：.是属性访问符。通过名字找（.）vs通过位置找（[]）。两者可连用。
+
+用户：那是不是相当于字典里的键值
+助手：概念相似但机制不同。字典用[]+key，对象用.+属性名。SDK选对象是因为IDE自动补全、类型提示更好。
+
+用户：这个response什么时候定义的属性，是在我导入SDK之后吗
+助手：详细解释流程：调用.create() → SDK发HTTP请求 → 服务器返回JSON → SDK把JSON转成Python对象（设好属性）→ 返回。类结构是SDK写死的，内容是服务器返回的。
+
+用户：不急着看练习2，我在完成练习1的同时，也学会了看文档
+助手：这个收获比跑通练习1本身更大。总结通用流程：找API Reference → 看Request Schema → 看Response Schema → 写代码跑看报错改。
+
+用户：（贴出SDK写法 vs requests直接HTTP写法的对比代码）
+助手：用户发现了两段代码的关系。解释SDK本质上就是把requests那一整套操作封装了一层——拼URL、设header、json.dumps序列化、json.loads解析，全部自动化。
+
+用户：client.chat.completions.create，这里的.也是通过属性查找吗
+助手：确认完全一样。展开client.chat.completions.create()的嵌套结构。
+
+用户：也就是说我写model，message最后是调用create这个函数的参数
+助手：确认——这些参数SDK内部的create()方法接收、组装成JSON、塞进HTTP请求body发给服务器。
+
+用户：ok，我已经大概了解了api调用llm了，想换一个模型自己写一遍。就用教程里那个模型吧，gemma4:e4b，是开源模型，可以直接下载到电脑里。大概有多大？
+助手：确认是Google开源模型。需要装Ollama。ollama pull gemma4:e4b，约2-3GB。问到磁盘是否够。
+
+用户：这个等我晚一点有免费wifi再下载。不过在图书馆学习时跑本地模型，会不会风扇太大声？
+助手：分析CPU/GPU跑模型的负载情况：输出时才满载几十秒，平常空闲。建议装好后在图书馆试试，太吵可换方案：手机热点+DeepSeek API（流量很小）或换更小模型如gemma3:1b。
+
+用户：ok，把我们今晚上的聊天记录整理一下，我和你对话都要有，不要压缩，全部写在一个txt文本里，想发给GPT看。
+
+助手：（正在生成此文件）
+
+========== 附录：练习 1 最终代码 ==========
+
+文件：stage1/from openai import OpenAI.py
+
+# Please install OpenAI SDK first: `pip3 install openai`
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ.get('DEEPSEEK_API_KEY'),
+    base_url="https://api.deepseek.com")
+
+response = client.chat.completions.create(
+    model="deepseek-v4-pro",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant"},
+        {"role": "user", "content": "Hello"},
+    ],
+    stream=False,
+    reasoning_effort="high",
+    extra_body={"thinking": {"type": "enabled"}}
+)
+
+print(response.choices[0].message.content)
+
+—— 以上为 Stage 1 练习 1（Hello World API）的完成代码 ——
